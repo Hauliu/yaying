@@ -1,0 +1,58 @@
+server:
+  port: 8080
+  max-http-header-size: 10240
+
+guns:
+  swagger-open: true                #是否开启swagger (true/false)
+  kaptcha-open: false               #是否开启登录时验证码 (true/false)
+  spring-session-open: false        #是否开启spring session,如果是多机环境需要开启(true/false)
+  session-invalidate-time: 1800     #session失效时间(只在单机环境下生效，多机环境在SpringSessionConfig类中配置) 单位：秒
+  session-validation-interval: 900  #多久检测一次失效的session(只在单机环境下生效) 单位：秒
+
+beetl:
+  resource-auto-check: true         #热加载beetl模板，开发时候用
+
+spring:
+  redis:  ###### redis 配置
+    host: 127.0.0.1  # ip地址
+    database: 0  # redis数据库  0-15
+    port: 6379  # 端口号
+    password: 123456 # 无密码不填
+    timeout: 30000s   # 连接超时时间 （默认1天）
+    lettuce:
+      shutdown-timeout: 100ms # 关闭超时时间 默认 100ms
+      pool: # lettuce 连接池
+        max-active: 8 # 连接池最大连接数 默认 8（-1 ：表示没有限制）
+        max-wait: 60000ms # 连接池最大阻塞等待时间 默认-1ms （-1 :表示没有限制） 这里设置1分钟
+        max-idle: 8 # 最大空闲连接  默认 8
+        min-idle: 0 # 最小空闲连接  默认 0
+  profiles:
+    active: @spring.active@
+  mvc:
+    view:
+      prefix: /pages
+  devtools:
+    restart:
+      enabled: false
+      additional-paths: src/main/java
+      exclude: assets/**,pages/**
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 100MB
+  main:
+    allow-bean-definition-overriding: true
+mybatis-plus:
+  typeAliasesPackage: cn.stylefeng.guns.modular.system.model
+
+log:
+  path: guns-logs
+wx:
+  pay:
+    appId: #微信公众号或者小程序等的appid
+    mchId: #微信支付商户号
+    mchKey: #微信支付商户密钥
+    subAppId: #服务商模式下的子商户公众账号ID
+    subMchId: #服务商模式下的子商户号
+    keyPath: # p12证书的位置，可以指定绝对路径，也可以指定类路径（以classpath:开头）
+

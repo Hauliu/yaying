@@ -1,0 +1,16 @@
+package cn.stylefeng.guns.system;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import cn.stylefeng.guns.base.BaseJunit;
+import cn.stylefeng.guns.modular.system.mapper.NoticeMapper;
+
+/**
+ * 首页通知展示测试
+ */
+public class BlackBoardTest extends BaseJunit {
+
+    @Autowired
+    NoticeMapper noticeMapper;
+
+}

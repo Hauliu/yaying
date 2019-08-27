@@ -1,0 +1,18 @@
+package cn.stylefeng.guns.modular.system.entity.mill;
+
+import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.TableName;
+
+
+/**
+ * 
+ * 
+ *
+ */
+@TableName("mill_parameter_setting")
+public class MillParameterSetting implements Serializable {
+
+	private static final long serialVersionUID = 8218461275597482227L;
+
+}

@@ -1,0 +1,158 @@
+layui.use(['table', 'admin', 'ax', 'ztree'], function () {
+    var $ = layui.$;
+    var table = layui.table;
+    var $ax = layui.ax;
+    var admin = layui.admin;
+    var $ZTree = layui.ztree;
+
+/**
+ * ${context.bizChName}管理初始化
+ */
+var ${context.bizEnBigName} = {
+    tableId: "${context.bizEnName}Table",	//表格id
+    condition: {
+        ${context.bizEnName}Id: ""
+    }
+};
+
+/**
+ * 初始化表格的列
+ */
+${context.bizEnBigName}.initColumn = function () {
+    return [[
+        {type: 'checkbox'},
+        {field: '${context.bizEnName}Id', hide: true, sort: true, title: 'id'},
+        {field: 'createTime', sort: true, title: '创建时间'},
+        {align: 'center', toolbar: '#tableBar', title: '操作', minWidth: 200}
+    ]];
+};
+
+
+    /**
+     * 点击查询按钮
+     */
+    ${context.bizEnBigName}.search = function () {
+        var queryData = {};
+        queryData['condition'] = $("#condition").val();
+        queryData['${context.bizEnName}Id'] = ${context.bizEnBigName}.condition.${context.bizEnName}Id;
+        table.reload(${context.bizEnBigName}.tableId, {where: queryData});
+    };
+
+
+
+/**
+ * 打开查看${context.bizChName}详情
+ */
+${context.bizEnBigName}.open${context.bizEnBigName}Detail = function () {
+    if (this.check()) {
+        var index = layer.open({
+            type: 2,
+            title: '${context.bizChName}详情',
+            area: ['800px', '420px'], //宽高
+            fix: false, //不固定
+            maxmin: true,
+            content: Feng.ctxPath + '/${context.bizEnName}/${context.bizEnName}_edit/' + ${context.bizEnBigName}.seItem.id
+        });
+        this.layerIndex = index;
+    }
+};
+
+
+    /**
+     * 删除${context.bizChName}
+     *
+     */
+    ${context.bizEnBigName}.onDelete${context.bizEnBigName} = function (data) {
+        var operation = function () {
+            var ajax = new $ax(Feng.ctxPath + "/${context.bizEnName}/delete", function () {
+                Feng.success("删除成功!");
+                table.reload(${context.bizEnBigName}.tableId);
+            }, function (data) {
+                Feng.error("删除失败!" + data.responseJSON.message + "!");
+            });
+            ajax.set("${context.bizEnName}Id", data.${context.bizEnName}Id);
+            ajax.start();
+        };
+        Feng.confirm("是否删除${context.bizChName} ?", operation);
+    };
+
+    /**
+     * 弹出添加${context.bizChName}
+     */
+    ${context.bizEnBigName}.openAdd${context.bizEnBigName} = function () {
+        admin.putTempData('formOk', false);
+        top.layui.admin.open({
+            type: 2,
+            title: '添加${context.bizChName}',
+            area:["800px","420px"],
+            content: Feng.ctxPath + '/${context.bizEnName}/${context.bizEnName}_add',
+            end: function () {
+                admin.getTempData('formOk') && table.reload(${context.bizEnBigName}.tableId);
+            }
+        });
+    };
+
+    /**
+     * 导出excel按钮
+     */
+    ${context.bizEnBigName}.exportExcel = function () {
+        var checkRows = table.checkStatus(${context.bizEnBigName}.tableId);
+        if (checkRows.data.length === 0) {
+            Feng.error("请选择要导出的数据");
+        } else {
+            table.exportFile(tableResult.${context.bizEnName}.id, checkRows.data, 'xls');
+        }
+    };
+   /**
+     * 点击编辑${context.bizChName}
+     *
+     */
+     ${context.bizEnBigName}.onEdit${context.bizEnBigName} = function (data) {
+        admin.putTempData('formOk', false);
+        top.layui.admin.open({
+            type: 2,
+            title: '修改${context.bizChName}',
+            area:["800px","420px"],
+            content: Feng.ctxPath + '/${context.bizEnName}/${context.bizEnName}_edit?${context.bizEnName}Id=' + data.${context.bizEnName}Id,
+            end: function () {
+                admin.getTempData('formOk') && table.reload(${context.bizEnBigName}.tableId);
+            }
+        });
+    };
+ // 渲染表格
+    var tableResult = table.render({
+        elem: '#' + ${context.bizEnBigName}.tableId,
+        url: Feng.ctxPath + '/${context.bizEnName}/list',
+        page: true,
+        height: "full-158",
+        cellMinWidth: 100,
+        limit:100,
+        limits: [100,200,300,400,500],
+        cols: ${context.bizEnBigName}.initColumn()
+    });
+ // 搜索按钮点击事件
+    $('#btnSearch').click(function () {
+        ${context.bizEnBigName}.search();
+    });
+
+    // 添加按钮点击事件
+    $('#btnAdd').click(function () {
+        ${context.bizEnBigName}.openAdd${context.bizEnBigName}();
+    });
+
+    // 导出excel
+    $('#btnExp').click(function () {
+        ${context.bizEnBigName}.exportExcel();
+    });
+
+    // 工具条点击事件
+    table.on('tool(' + ${context.bizEnBigName}.tableId + ')', function (obj) {
+        var data = obj.data;
+        var layEvent = obj.event;
+        if (layEvent === 'edit') {
+            ${context.bizEnBigName}.onEdit${context.bizEnBigName}(data);
+        } else if (layEvent === 'delete') {
+            ${context.bizEnBigName}.onDelete${context.bizEnBigName}(data);
+        }
+    });
+});

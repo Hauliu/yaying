@@ -1,0 +1,26 @@
+package cn.stylefeng.guns.system;
+
+import javax.annotation.Resource;
+
+import org.junit.Test;
+
+import cn.stylefeng.guns.base.BaseJunit;
+import cn.stylefeng.guns.modular.system.mapper.DictMapper;
+import cn.stylefeng.guns.modular.system.service.DictService;
+
+/**
+ * 字典服务测试
+ */
+public class DictTest extends BaseJunit {
+
+    @Resource
+    DictService dictService;
+
+    @Resource
+    DictMapper dictMapper;
+
+    @Test
+    public void deleteTest() {
+        this.dictService.delteDict(16L);
+    }
+}

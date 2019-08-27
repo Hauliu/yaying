@@ -1,0 +1,15 @@
+package ${mapper.packageName};
+<% for(import in mapper.mapperImports!){ %>
+import ${import};
+<% } %>
+/**
+ * ${context.bizChName}Mapper
+ *
+ * @author yaying.liu
+ * @Date ${tool.currentTime()}
+ */
+public interface ${context.bizEnBigName}Mapper extends BaseMapper<${context.bizEnBigName}> {
+
+    Page<Map<String,Object>> selectByCondition(@Param("page") Page page, @Param("condition") String condition);
+
+}
